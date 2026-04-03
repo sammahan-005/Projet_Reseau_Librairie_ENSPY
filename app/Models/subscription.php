@@ -16,4 +16,14 @@ class subscription extends Model
         'user_id',
         'payment_id',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
+    public function paiement()
+    {
+        return $this->belongsTo(paiement::class);
+    }
 }

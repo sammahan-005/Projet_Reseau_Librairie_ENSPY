@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lecture', function (Blueprint $table) {
+        Schema::create('book_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // the project uses a `book` table (singular) in migrations, so reference it explicitly
             $table->foreignId('book_id')->constrained('book')->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique(['user_id', 'book_id']);
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lecture');
+        Schema::dropIfExists('book_user');
     }
 };

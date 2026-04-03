@@ -40,4 +40,15 @@ class User extends Authenticatable
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
+
+    public function books()
+    {
+        return $this->belongsToMany(Book::class, 'book_user', 'user_id', 'book_id')
+                    ->withTimestamps();
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

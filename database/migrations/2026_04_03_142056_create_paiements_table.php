@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paiements', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('payment_method');
             $table->integer('amount');
             $table->date('payment_date');
-            $table->enum('status', ['en attente', 'effectué', 'échoué'])->default('en attente');
+            // use ASCII status values to avoid encoding/locale issues
+            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->foreignId('subscription_id')->constrained('subscriptions')->onDelete('cascade');
             $table->timestamps();
         });
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paiements');
+    Schema::dropIfExists('payments');
     }
 };

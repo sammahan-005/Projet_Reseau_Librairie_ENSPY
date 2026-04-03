@@ -12,4 +12,10 @@ class book extends Model
         'published_year',
         'genre',
     ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'book_user', 'book_id', 'user_id')
+                    ->withTimestamps();
+    }
 }

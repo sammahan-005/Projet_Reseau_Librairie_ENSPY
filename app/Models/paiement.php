@@ -13,4 +13,9 @@ class paiement extends Model
         'payment_date',
         'subscription_id',
     ];
+
+    public function subscriptions()
+    {
+        return $this->belongsTo(Subscription::class);
+    }
 }
