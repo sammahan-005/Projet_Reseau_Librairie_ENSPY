@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->integer('durée');
-            $table->integer('prix');
-            $table->integer('nombre heure');
-            $table->date('date debut');
-            $table->integer('fréquence journalière');
-            $table->enum('catégorie', ['Amateur', 'Professionnel', 'Premium']);
+            $table->integer('duration');
+            $table->integer('price');
+            $table->integer('hours');
+            $table->date('start_date');
+            $table->integer('daily_frequency');
+            $table->enum('type', ['Beginner', 'Professional', 'Premium']);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('paiement_id')->constrained('paiements')->onDelete('cascade');
+            $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
             $table->timestamps();
         });
     }
