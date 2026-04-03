@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
-            $table->string('moyen de paiement');
-            $table->integer('montant');
-            $table->date('date de paiement');
-            $table->enum('statut', ['en attente', 'effectué', 'échoué'])->default('en attente');
+            $table->string('payment_method');
+            $table->integer('amount');
+            $table->date('payment_date');
+            $table->enum('status', ['en attente', 'effectué', 'échoué'])->default('en attente');
             $table->foreignId('subscription_id')->constrained('subscriptions')->onDelete('cascade');
             $table->timestamps();
         });
