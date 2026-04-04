@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('daily_frequency');
             $table->enum('type', ['Beginner', 'Professional', 'Premium']);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
+            //$table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
             $table->timestamps();
         });
     }

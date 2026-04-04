@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('book', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->string('author');
-            $table->enum('genre', ['roman', 'poême', 'théâtre', 'science-fiction', 'roman-policier', 'bande-dessinée'])->default('roman');
-            $table->date('published_year');
+            $table->string('isbn')->unique();
+            $table->enum('genre', ['Roman', 'Poême', 'Théâtre', 'Science-fiction', 'Roman-policier', 'Bande-dessinée','Fiction', 'Non-Fiction', 'Fantasie', 'Mystère', 'Biographie'])->default('Roman');
+            $table->year('published_year');
             $table->timestamps();
         });
     }
