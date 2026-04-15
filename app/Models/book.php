@@ -11,11 +11,13 @@ class book extends Model
         'author',
         'published_year',
         'genre',
+        'pdf_path',
     ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'book_user', 'book_id', 'user_id')
-                    ->withTimestamps();
+        return $this->belongsToMany(User::class, 'book__users')
+            ->withPivot('duration')
+            ->withTimestamps();
     }
 }

@@ -34,8 +34,18 @@ class bookController extends Controller
     public function store(bookRequest $request)
     {
         $validated = $request->validated();
+
+        if ($request->hasFile('pdf_file')) {
+            
+            $path = $request->file('pdf_file')->store('books', 'public');
+            
+            
+            $validated['pdf_path'] = $path;
+        }
+
         $book = book::create($validated);
-        return redirect()->route('books.index');
+
+        return redirect()->route('books.index')->with('success', 'Livre ajouté !');
     }
 
     /**

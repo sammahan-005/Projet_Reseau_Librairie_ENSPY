@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('book_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            // the project uses a `book` table (singular) in migrations, so reference it explicitly
             $table->foreignId('book_id')->constrained('book')->onDelete('cascade');
+            $table->integer('duration')->nullable(); // en minutes
             $table->timestamps();
 
-            $table->unique(['user_id', 'book_id']);
         });
     }
 

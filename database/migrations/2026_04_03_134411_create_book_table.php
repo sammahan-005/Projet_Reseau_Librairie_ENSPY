@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('author');
             $table->enum('genre', ['roman', 'poême', 'théâtre', 'science-fiction', 'roman-policier', 'bande-dessinée'])->default('roman');
             $table->date('published_year');
+            $table->string('pdf_path');
             $table->timestamps();
+
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_book');
+        Schema::dropIfExists('book');
     }
 };

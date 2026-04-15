@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\paiement;
+use App\Http\Requests\paiementRequest;
 
 class paiementController extends Controller
 {
@@ -11,7 +13,9 @@ class paiementController extends Controller
      */
     public function index()
     {
-        //
+        $paiement = paiement::all();
+        return Inertia::render('paiements/index', [
+            'paiements'=> $paiement]);
     }
 
     /**
@@ -19,15 +23,17 @@ class paiementController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('paiement/create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(paiementRequest $request)
     {
-        //
+        $validated = $request->validated();
+        paiement::create($validated);
+        return redirect()->route('paiements.index');
     }
 
     /**
@@ -35,7 +41,9 @@ class paiementController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $paiement = paiement::find($id);
+        return Inertia::render('paiement/show', [
+            'paiement'=> $paiement]);
     }
 
     /**
@@ -43,15 +51,20 @@ class paiementController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $paiement = paiement::find($id);
+        return Inertia::render('paiement/edit', [
+            'paiement'=> $paiement]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(paiementRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        $paiement = paiement::find($id);
+        $paiement->update($validated);
+        return redirect()->route('paiements.index');
     }
 
     /**
@@ -59,6 +72,8 @@ class paiementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $paiement = paiement::find($id);
+        $paiement->delete();
+        return redirect()->route('paiements.index');
     }
 }

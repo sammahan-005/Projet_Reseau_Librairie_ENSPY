@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('subcription__users', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_method');
-            $table->integer('amount');
-            $table->date('payment_date');
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('subscription_id')->constrained('subscriptions')->onDelete('cascade');
+            $table->integer('remaining');//temps restant en minutes
+            $table->date('start');
+            $table->date('end');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-    Schema::dropIfExists('payments');
+        Schema::dropIfExists('subcription__users');
     }
 };

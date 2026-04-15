@@ -17,13 +17,16 @@ class subscription extends Model
         'payment_id',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
+  
     public function paiement()
     {
-        return $this->belongsTo(paiement::class);
+        return $this->hasOne(paiement::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'subcription__users')
+            ->withPivot('remaining', 'start', 'end')
+            ->withTimestamps();
     }
 }
