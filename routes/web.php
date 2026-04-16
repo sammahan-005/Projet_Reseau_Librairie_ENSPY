@@ -23,4 +23,16 @@ require __DIR__.'/settings.php';
 
 Route::resource('books', 'App\Http\Controllers\bookController');
 
-Route::resource('paiements','App\Http\Controllers\paiementController');
+Route::post('/paiements/{id}', ['App\Http\Controllers\paiementController', 'store'])->name('paiement.store');
+
+Route::resource('paiements','App\Http\Controllers\paiementController')->except('store');
+
+Route::get('/subcriptions/index',['App\Http\Controllers\subscriptionController','index'])->name('subscription.index');
+
+Route::get('/subscriptions/create',['App\Http\Controllers\subscriptionController','create'])->name('subscription.create');
+
+Route::post('/subscriptions/store',['App\Http\Controllers\subscriptionController','store'])->name('subscription.store');
+
+Route::get('/consultation/{id}',['App\Http\Controllers\consultationController','consultation'])->name('consultation.consultation');
+
+Route::post('/endConsultation/{id}',['App\Http\Controllers\consultationController','endConsultation'])->name('consultation.endConsultation');

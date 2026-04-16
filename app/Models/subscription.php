@@ -9,10 +9,7 @@ class subscription extends Model
     protected $fillable = [
         'duration',
         'price',
-        'hours',
-        'start_date',
-        'daily_frequency',
-        'type',
+        'type',//'standard', 'medium', 'Premium'
         'user_id',
         'payment_id',
     ];

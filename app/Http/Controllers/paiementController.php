@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
 use App\Models\paiement;
 use App\Http\Requests\paiementRequest;
+use Inertia\Inertia;
 
 class paiementController extends Controller
 {
@@ -29,10 +31,12 @@ class paiementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(paiementRequest $request)
+    public function store(paiementRequest $request, string $id)
     {
         $validated = $request->validated();
-        paiement::create($validated);
+        $paiement =paiement::create($validated);
+        $paiement->subscription_id = $id;
+        $paiement->save();
         return redirect()->route('paiements.index');
     }
 
