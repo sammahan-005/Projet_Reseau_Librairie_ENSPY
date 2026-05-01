@@ -15,7 +15,7 @@ class bookController extends Controller
     {
         $books = book::all();
 
-        return Inertia::render('books/index', [
+        return Inertia::render('home', [
             'books' => $books,
         ]);
     }
