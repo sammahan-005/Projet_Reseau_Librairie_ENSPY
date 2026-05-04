@@ -5,12 +5,12 @@ use Laravel\Fortify\Features;
 use Inertia\Inertia;
 
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+// Home page served by Book controller to show list of books
+Route::get('/', [App\Http\Controllers\bookController::class, 'index'])->name('home');
 
+// Keep /home consistent with root which is handled by bookController@index (renders 'Home')
 Route::get('/home', function () {
-    return Inertia::render('books');
+    return redirect()->route('home');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -15,6 +15,7 @@ class bookController extends Controller
     {
         $books = book::all();
 
+        // Render the Home page so the root route can display the books list
         return Inertia::render('home', [
             'books' => $books,
         ]);
