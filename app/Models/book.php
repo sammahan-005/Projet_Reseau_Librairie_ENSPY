@@ -12,6 +12,7 @@ class book extends Model
         'published_year',
         'genre',
         'pdf_path',
+        'cover_image',
     ];
 
     public function users()
