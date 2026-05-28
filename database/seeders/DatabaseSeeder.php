@@ -22,14 +22,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $books = [
-            ['title' => 'La Science du Chaos',     'author' => 'Emmanuel Dibonge',  'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'Le Guide Culinaire',       'author' => 'Gaëtan Dissomme',   'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'Classiques',               'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'La Photographie Créative', 'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'Le Secret Quantique',      'author' => 'Emmanuel Dibonge',  'genre' => 'science-fiction','cover_image' => null],
-            ['title' => 'La Photographie Créative', 'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'Le Guide Culinaire',       'author' => 'Gaëtan Dissomme',   'genre' => 'roman',          'cover_image' => null],
-            ['title' => 'La Science du Chaos',      'author' => 'Emmanuel Dibonge',  'genre' => 'roman',          'cover_image' => null],
+            ['title' => 'La Science du Chaos',     'author' => 'Emmanuel Dibonge',  'genre' => 'roman',          'cover_image' => 'covers/nature.jpg'],
+            ['title' => 'Le Guide Culinaire',       'author' => 'Gaëtan Dissomme',   'genre' => 'roman',          'cover_image' => 'covers/cook1.jpg'],
+            ['title' => 'Classiques',               'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => 'covers/magazine1.jpg'],
+            ['title' => 'La Photographie Créative', 'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => 'covers/art.jpg'],
+            ['title' => 'Le Secret Quantique',      'author' => 'Emmanuel Dibonge',  'genre' => 'science-fiction','cover_image' => 'covers/science2.jpg'],
+            ['title' => 'La Photographie Créative', 'author' => 'Cassan de Stainmo', 'genre' => 'roman',          'cover_image' => 'covers/culture.jpg'],
+            ['title' => 'Le Guide Culinaire',       'author' => 'Gaëtan Dissomme',   'genre' => 'roman',          'cover_image' => 'covers/doc1.jpg'],
+            ['title' => 'La Science du Chaos',      'author' => 'Emmanuel Dibonge',  'genre' => 'roman',          'cover_image' => 'covers/politique2.jpg'],
         ];
 
         foreach ($books as $book) {
