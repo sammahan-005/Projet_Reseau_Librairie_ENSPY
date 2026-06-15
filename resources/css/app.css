@@ -162,6 +162,38 @@
     --sidebar: hsl(240 5.9% 10%);
 }
 
+/* Light-orange theme (alternative light mode with orange accents) */
+.light-orange {
+    --background: hsl(0 0% 100%);
+    --foreground: hsl(240 4% 10%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(240 4% 10%);
+    --primary: hsl(28 100% 40%); /* orange */
+    --primary-foreground: hsl(0 0% 100%);
+    --accent: hsl(28 100% 45%);
+    --accent-foreground: hsl(0 0% 100%);
+    --sidebar-background: hsl(0 0% 98%);
+    --sidebar-foreground: hsl(240 4% 10%);
+}
+
+/* helper classes for theme-aware buttons */
+.btn-accent {
+    @apply inline-flex items-center px-6 py-3 rounded-full text-white font-semibold shadow;
+    background: linear-gradient(90deg, rgba(124,58,237,1) 0%, rgba(79,70,229,1) 100%);
+}
+.light-orange .btn-accent {
+    background: linear-gradient(90deg, rgba(255,127,0,1) 0%, rgba(245,95,31,1) 100%);
+}
+.btn-outline-accent {
+    @apply inline-flex items-center px-6 py-3 rounded-full border-2 font-semibold;
+    border-color: rgba(124,58,237,0.7);
+    color: rgba(255,255,255,0.95);
+}
+.light-orange .btn-outline-accent {
+    border-color: rgba(255,127,0,0.9);
+    color: rgba(40,40,40,0.95);
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

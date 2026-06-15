@@ -24,43 +24,32 @@ defineProps<{
 <template>
     <Head title="Forgot password" />
 
-    <div
-        v-if="status"
-        class="mb-4 text-center text-sm font-medium text-green-600"
-    >
-        {{ status }}
-    </div>
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
 
-    <div class="space-y-6">
-        <Form v-bind="email.form()" v-slot="{ errors, processing }">
-            <div class="grid gap-2">
-                <Label for="email">Email address</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    autocomplete="off"
-                    autofocus
-                    placeholder="email@example.com"
-                />
-                <InputError :message="errors.email" />
+            <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">{{ status }}</div>
+
+            <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-6">Mot de passe oublié</h2>
+
+            <Form v-bind="email.form()" v-slot="{ errors, processing }">
+                <div class="grid gap-2">
+                    <Label for="email">Email</Label>
+                    <Input id="email" type="email" name="email" autocomplete="off" autofocus placeholder="email@example.com" />
+                    <InputError :message="errors.email" />
+                </div>
+
+                <div class="my-6 flex items-center justify-start">
+                    <Button class="w-full bg-orange-500 hover:bg-orange-600 dark:bg-purple-500 dark:hover:bg-purple-600 text-white" :disabled="processing" data-test="email-password-reset-link-button">
+                        <Spinner v-if="processing" />
+                        Envoyer le lien de réinitialisation
+                    </Button>
+                </div>
+            </Form>
+
+            <div class="space-x-1 text-center text-sm text-muted-foreground">
+                <span>Ou, revenir à</span>
+                <TextLink :href="login()" class="text-orange-500 dark:text-purple-400">se connecter</TextLink>
             </div>
-
-            <div class="my-6 flex items-center justify-start">
-                <Button
-                    class="w-full"
-                    :disabled="processing"
-                    data-test="email-password-reset-link-button"
-                >
-                    <Spinner v-if="processing" />
-                    Email password reset link
-                </Button>
-            </div>
-        </Form>
-
-        <div class="space-x-1 text-center text-sm text-muted-foreground">
-            <span>Or, return to</span>
-            <TextLink :href="login()">log in</TextLink>
         </div>
     </div>
 </template>
