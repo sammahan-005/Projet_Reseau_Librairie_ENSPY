@@ -22,6 +22,8 @@ class LoginResponse implements LoginResponseContract
         if ($user && isset($user->role) && $user->role === 'user') {
             // Use named route if available, otherwise fallback to /library
             $redirect = route('library', [], false) ?: '/library';
+        } elseif ($user && isset($user->role) && $user->role === 'admin') {
+            $redirect = route('admin.dashboard', [], false) ?: '/admin';
         }
 
         return redirect()->intended($redirect);

@@ -5,6 +5,7 @@ use App\Http\Requests\BookRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\book;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class BookController extends Controller
@@ -60,6 +61,42 @@ class BookController extends Controller
         $book = Book::findOrFail($id);
         return Inertia::render('books/show', [
             'book' => $book,
+        ]);
+    }
+
+    public function read(book $book, Request $request): Response|\Illuminate\Http\RedirectResponse
+    {
+        $subscription = DB::table('subscriptions')
+            ->where('user_id', $request->user()->id)
+            ->where('created_at', '>=', now()->subMonth())
+            ->latest()
+            ->first();
+
+        if (! $subscription) {
+            return redirect()
+                ->route('subscription.index')
+                ->with('error', 'Veuillez souscrire à un abonnement mensuel pour lire ce livre.');
+        }
+
+        $dailyMinutes = (int) ($subscription->duration ?? 0);
+
+        if ($dailyMinutes <= 0) {
+            $dailyMinutes = match (strtolower($subscription->type ?? 'standard')) {
+            'premium' => 120,
+            'medium' => 60,
+            default => 30,
+            };
+        }
+
+        return Inertia::render('books/Read', [
+            'book' => $book->only('id', 'title', 'author', 'genre', 'cover_image'),
+            'subscription' => [
+                'type' => $subscription->type,
+                'daily_minutes' => $dailyMinutes,
+                'daily_seconds' => $dailyMinutes * 60,
+            ],
+            'pdfUrl' => route('consultation.consultation', $book->id),
+            'libraryUrl' => route('library'),
         ]);
     }
 

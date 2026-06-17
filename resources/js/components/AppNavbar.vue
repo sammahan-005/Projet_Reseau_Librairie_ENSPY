@@ -24,13 +24,19 @@
       <!-- Theme selector (dark / light-orange) -->
       <button class="btn" @click="toggleTheme">{{ themeLabel }}</button>
 
-      <a href="/login" class="btn login">Se connecter</a>
+      <a :href="authUser ? '/library' : '/login'" class="btn login">
+        {{ authUser?.name ?? 'Se connecter' }}
+      </a>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+const authUser = computed(() => page.props.auth?.user as { name?: string } | null)
 
 const currentLang = ref(localStorage.getItem('locale') || 'fr')
 const theme = ref(localStorage.getItem('theme') || (document.documentElement.classList.contains('dark') ? 'dark' : 'light'))

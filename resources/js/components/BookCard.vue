@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import SubscriptionGateModal from '@/components/SubscriptionGateModal.vue';
 
 interface Book {
     id: number;
@@ -9,9 +11,29 @@ interface Book {
     cover_image: string | null;
 }
 
-defineProps<{
+const props = defineProps<{
     book: Book;
 }>();
+
+const page = usePage();
+const showSubscriptionModal = ref(false);
+const authUser = computed(() => page.props.auth?.user);
+const activeSubscription = computed(() => (page.props as any).auth?.subscription);
+const canRead = computed(() => Boolean(authUser.value && activeSubscription.value));
+const targetUrl = computed(() => {
+    if (!authUser.value) {
+        return '/login';
+    }
+
+    return canRead.value ? `/books/${props.book.id}/read` : '#';
+});
+
+function handleBookClick(event: MouseEvent) {
+    if (authUser.value && !activeSubscription.value) {
+        event.preventDefault();
+        showSubscriptionModal.value = true;
+    }
+}
 
 function genreColor(genre: string): string {
     const colors: Record<string, string> = {
@@ -31,7 +53,12 @@ function genreColor(genre: string): string {
 <template>
     <div class="relative rounded-xl overflow-hidden cursor-pointer group shadow-lg hover:shadow-2xl transition-shadow duration-300">
 
-    <Link :href="$page.props.auth.user ? `/books/${book.id}` : '/login'" class="block">
+    <component
+        :is="targetUrl === '#' ? 'div' : Link"
+        :href="targetUrl === '#' ? undefined : targetUrl"
+        class="block"
+        @click="handleBookClick"
+    >
             <div class="aspect-[3/4] w-full relative overflow-hidden rounded-t-lg">
 
             <img
@@ -63,15 +90,18 @@ function genreColor(genre: string): string {
             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300"></div>
 
             </div>
-        </Link>
+        </component>
 
         <!-- Bandeau bas -->
         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-r from-violet-600 to-indigo-700 text-white text-xs py-2 px-3 flex items-center gap-2 rounded-b-lg">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2a7 7 0 0 0-7 7v3H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-1V9a7 7 0 0 0-7-7z" />
             </svg>
-            <span>Connectez-vous pour accéder au contenu</span>
+            <span>{{ !$page.props.auth.user ? 'Connectez-vous pour accéder au contenu' : activeSubscription ? 'Lire avec mon abonnement' : 'Choisir une souscription' }}</span>
         </div>
 
+        <Teleport to="body">
+            <SubscriptionGateModal :book-id="book.id" :open="showSubscriptionModal" @close="showSubscriptionModal = false" />
+        </Teleport>
     </div>
 </template>

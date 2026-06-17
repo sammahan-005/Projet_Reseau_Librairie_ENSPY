@@ -11,7 +11,6 @@ class subscription extends Model
         'price',
         'type',//'standard', 'medium', 'Premium'
         'user_id',
-        'payment_id',
     ];
 
   

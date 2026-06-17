@@ -1,5 +1,20 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue';
+import { usePage, Link } from '@inertiajs/vue3';
+import SubscriptionGateModal from '@/components/SubscriptionGateModal.vue';
+
 const props = defineProps<{ book: any }>();
+
+const page = usePage();
+const showSubscriptionModal = ref(false);
+const activeSubscription = computed(() => (page.props as any).auth?.subscription);
+
+function continueReading(event: MouseEvent) {
+  if (!activeSubscription.value) {
+    event.preventDefault();
+    showSubscriptionModal.value = true;
+  }
+}
 </script>
 
 <template>
@@ -15,8 +30,14 @@ const props = defineProps<{ book: any }>();
 
     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-opacity flex items-end justify-center p-3 opacity-0 group-hover:opacity-100">
       <div class="flex gap-2">
-        <a href="#" class="px-3 py-2 rounded bg-violet-600 text-white text-sm">Continuer</a>
-        <a href="#" class="px-3 py-2 rounded bg-white/5 text-white text-sm">Détails</a>
+        <Link
+          :href="activeSubscription ? `/books/${props.book.id}/read` : '#'"
+          class="px-3 py-2 rounded bg-violet-600 text-white text-sm"
+          @click="continueReading"
+        >
+          Continuer
+        </Link>
+        <Link :href="`/books/${props.book.id}`" class="px-3 py-2 rounded bg-white/5 text-white text-sm">Détails</Link>
         <button class="px-3 py-2 rounded bg-white/5 text-white text-sm">❤</button>
       </div>
     </div>
@@ -32,5 +53,9 @@ const props = defineProps<{ book: any }>();
       <span v-if="props.book.is_favorite" class="text-xs bg-violet-700/70 px-2 py-1 rounded">Favori</span>
       <span v-if="props.book.is_downloaded" class="text-xs bg-violet-700/70 px-2 py-1 rounded">Téléchargé</span>
     </div>
+
+    <Teleport to="body">
+        <SubscriptionGateModal :book-id="props.book.id" :open="showSubscriptionModal" @close="showSubscriptionModal = false" />
+    </Teleport>
   </div>
 </template>

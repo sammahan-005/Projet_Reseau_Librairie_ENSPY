@@ -21,4 +21,9 @@ class book extends Model
             ->withPivot('duration')
             ->withTimestamps();
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'book_category');
+    }
 }

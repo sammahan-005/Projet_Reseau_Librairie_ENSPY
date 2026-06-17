@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -35,11 +36,24 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $activeSubscription = $request->user()
+            ? DB::table('subscriptions')
+                ->where('user_id', $request->user()->id)
+                ->where('created_at', '>=', now()->subMonth())
+                ->latest()
+                ->first()
+            : null;
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
+                'subscription' => $activeSubscription ? [
+                    'id' => $activeSubscription->id,
+                    'type' => $activeSubscription->type,
+                    'duration' => $activeSubscription->duration,
+                ] : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
