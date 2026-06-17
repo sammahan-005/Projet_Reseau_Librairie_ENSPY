@@ -15,6 +15,9 @@ Route::get('/home', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
+    
+    // Library page for authenticated users (named route used by LoginResponse)
+    Route::get('library', [App\Http\Controllers\LibraryController::class, 'index'])->name('library');
 });
 
 

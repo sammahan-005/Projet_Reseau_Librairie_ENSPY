@@ -15,18 +15,21 @@ export function updateTheme(value: Appearance): void {
         return;
     }
 
+    const applyResolvedTheme = (theme: ResolvedAppearance) => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        document.documentElement.classList.toggle('light-orange', theme === 'light');
+        localStorage.setItem('theme', theme === 'dark' ? 'dark' : 'light-orange');
+    };
+
     if (value === 'system') {
         const mediaQueryList = window.matchMedia(
             '(prefers-color-scheme: dark)',
         );
         const systemTheme = mediaQueryList.matches ? 'dark' : 'light';
 
-        document.documentElement.classList.toggle(
-            'dark',
-            systemTheme === 'dark',
-        );
+        applyResolvedTheme(systemTheme);
     } else {
-        document.documentElement.classList.toggle('dark', value === 'dark');
+        applyResolvedTheme(value);
     }
 }
 
@@ -53,7 +56,22 @@ const getStoredAppearance = () => {
         return null;
     }
 
-    return localStorage.getItem('appearance') as Appearance | null;
+    const appearance = localStorage.getItem('appearance') as Appearance | null;
+    const legacyTheme = localStorage.getItem('theme');
+
+    if (appearance) {
+        return appearance;
+    }
+
+    if (legacyTheme === 'dark') {
+        return 'dark';
+    }
+
+    if (legacyTheme === 'light' || legacyTheme === 'light-orange') {
+        return 'light';
+    }
+
+    return null;
 };
 
 const prefersDark = (): boolean => {

@@ -12,6 +12,9 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\App as FacadeApp;
+use App\Actions\Fortify\LoginResponse as LoginResponseAction;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -31,6 +34,11 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
+
+        // Bind Fortify login response to our custom implementation that redirects users
+        $this->app->singleton(LoginResponseContract::class, function () {
+            return new LoginResponseAction();
+        });
     }
 
     /**

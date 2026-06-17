@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import AuthLayout from '@/layouts/auth/AuthSimpleLayout.vue';
+import AuthShell from '@/components/auth/AuthShell.vue';
 
-const { title = '', description = '' } = defineProps<{
+const { title = 'Accès sécurisé', description = 'Confirmez votre identité pour continuer.' } = defineProps<{
     title?: string;
     description?: string;
 }>();
 </script>
 
 <template>
-    <AuthLayout :title="title" :description="description">
+    <AuthShell :title="title" :description="description" mode="forgot">
         <slot />
-    </AuthLayout>
+    </AuthShell>
 </template>

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\book;
+use Database\Seeders\AdminUserSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,10 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        // Create a basic test user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Create the admin user (idempotent)
+        $this->call(AdminUserSeeder::class);
 
         $books = [
             ['title' => 'La Science du Chaos',     'author' => 'Emmanuel Dibonge',  'genre' => 'roman',          'cover_image' => 'covers/nature.jpg'],

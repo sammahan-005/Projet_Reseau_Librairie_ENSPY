@@ -17,7 +17,7 @@ class book extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'book__users')
+        return $this->belongsToMany(User::class, 'book_user')
             ->withPivot('duration')
             ->withTimestamps();
     }

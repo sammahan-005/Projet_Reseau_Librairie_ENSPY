@@ -4,13 +4,15 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+const appName = import.meta.env.VITE_APP_NAME || 'Librairie ENSPY';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
             case name === 'Welcome':
+                return null;
+            case ['auth/Login', 'auth/Register', 'auth/ForgotPassword'].includes(name):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
