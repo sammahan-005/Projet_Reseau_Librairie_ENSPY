@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function books()
     {
-        return $this->belongsToMany(book::class, 'book_user')
+        return $this->belongsToMany(Book::class, 'book_user')
             ->withPivot('duration')
             ->withTimestamps();
 
@@ -56,7 +56,7 @@ class User extends Authenticatable
 
     public function subscriptions()
     {
-        return $this->belongsToMany(subscription::class, 'subcription__users')
+        return $this->belongsToMany(Subscription::class, 'subcription__users')
             ->withPivot('remaining', 'start', 'end')
             ->withTimestamps();
 

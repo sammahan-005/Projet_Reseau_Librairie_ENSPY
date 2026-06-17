@@ -69,7 +69,7 @@ const breadcrumbs = [
               <TableHead>Utilisateur</TableHead>
               <TableHead>Prix</TableHead>
               <TableHead>Date</TableHead>
-              <TableHead>Statut Paiement</TableHead>
+              <TableHead>Statut Payment</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -83,8 +83,8 @@ const breadcrumbs = [
               <TableCell>{{ sub.price }} FCFA</TableCell>
               <TableCell>{{ new Date(sub.created_at).toLocaleDateString() }}</TableCell>
               <TableCell>
-                <Badge :variant="sub.paiement?.status === 'completed' ? 'default' : 'secondary'">
-                  {{ sub.paiement?.status || 'N/A' }}
+                <Badge :variant="sub.payment?.status === 'completed' ? 'default' : 'secondary'">
+                  {{ sub.payment?.status || 'N/A' }}
                 </Badge>
               </TableCell>
             </TableRow>

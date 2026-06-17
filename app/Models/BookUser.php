@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-class book_User extends Model
+class BookUser extends Model
 {
     protected $fillable=[
 

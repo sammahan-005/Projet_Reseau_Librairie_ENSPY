@@ -188,7 +188,7 @@ function submit() {
                         <div>
                             <label class="flex items-center gap-2 text-sm font-semibold">
                                 <WalletCards class="size-4" />
-                                Mode de paiement
+                                Mode de payment
                             </label>
                             <select v-model="form.payment_mode" class="mt-2 h-10 w-full rounded-md border border-border bg-background px-3 outline-none focus:ring-2 focus:ring-[var(--brand)]">
                                 <option>Mobile Money</option>
@@ -208,7 +208,7 @@ function submit() {
                     <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-dashed border-border bg-background p-4 hover:border-[var(--brand)]">
                         <ImageUp class="size-6 text-[var(--brand)]" />
                         <div>
-                            <div class="text-sm font-semibold">Capture d'écran du paiement</div>
+                            <div class="text-sm font-semibold">Capture d'écran du payment</div>
                             <div class="text-xs text-muted-foreground">{{ screenshotName || 'Ajouter une image justificative' }}</div>
                         </div>
                         <input type="file" accept="image/*" class="hidden" @change="selectScreenshot" />

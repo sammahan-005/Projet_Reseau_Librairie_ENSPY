@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BookRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\book;
+use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 

@@ -21,10 +21,10 @@ class AnalyticsController extends Controller
         $revenue = DB::table('payments')->where('status', 'completed')->sum('amount');
 
         $topBooks = DB::table('book_user')
-            ->select('books.id', 'books.title', DB::raw('count(book_user.id) as reads'))
+            ->select('books.id', 'books.title', DB::raw('count(book_user.id) as read_count'))
             ->join('books', 'book_user.book_id', '=', 'books.id')
             ->groupBy('books.id', 'books.title')
-            ->orderByDesc('reads')
+            ->orderByDesc('read_count')
             ->take(10)
             ->get();
 

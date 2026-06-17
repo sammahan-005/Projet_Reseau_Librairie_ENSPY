@@ -6,15 +6,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-use App\Models\subscription;
-use App\Models\paiement;
+use App\Models\Subscription;
+use App\Models\Payment;
 
 class PlansController extends Controller
 {
     public function index(Request $request)
     {
-        $subscriptions = subscription::with(['paiement', 'users'])->latest()->paginate(10);
-        $totalRevenue = paiement::where('status', 'completed')->sum('amount');
+        $subscriptions = Subscription::with(['payment', 'users'])->latest()->paginate(10);
+        $totalRevenue = Payment::where('status', 'completed')->sum('amount');
 
         return Inertia::render('admin/Plans/Index', [
             'subscriptions' => $subscriptions,

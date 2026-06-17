@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class subscription extends Model
+class Subscription extends Model
 {
     protected $fillable = [
         'duration',
@@ -14,9 +14,9 @@ class subscription extends Model
     ];
 
   
-    public function paiement()
+    public function payment()
     {
-        return $this->hasOne(paiement::class);
+        return $this->hasOne(Payment::class);
     }
 
     public function users()

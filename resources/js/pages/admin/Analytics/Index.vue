@@ -70,7 +70,7 @@ const breadcrumbs = [
                 </div>
                 <div class="flex flex-1 flex-col">
                   <span class="text-sm font-medium">{{ book.title }}</span>
-                  <span class="text-xs text-muted-foreground">{{ book.reads }} lectures</span>
+                  <span class="text-xs text-muted-foreground">{{ book.read_count }} lectures</span>
                 </div>
                 <Trophy v-if="index === 0" class="h-4 w-4 text-yellow-500" />
               </div>

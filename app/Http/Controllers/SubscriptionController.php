@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubscriptionRequest;
-use App\Models\subscription;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -73,12 +73,12 @@ class SubscriptionController extends Controller
         }
 
         // Create subscription
-        $subscription = subscription::create(array_merge($payload, [
+        $subscription = Subscription::create(array_merge($payload, [
             'user_id' => Auth::id(),
         ]));
 
         // Create simulated payment
-        $subscription->paiement()->create([
+        $subscription->payment()->create([
             'amount' => $payload['price'],
             'payment_method' => $validated['payment_mode'],
             'status' => 'completed',

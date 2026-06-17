@@ -63,9 +63,9 @@ require __DIR__.'/settings.php';
 
 Route::resource('books', App\Http\Controllers\BookController::class);
 
-Route::post('/paiements/{id}', [App\Http\Controllers\PaiementController::class, 'store'])->name('paiement.store');
+Route::post('/payments/{id}', [App\Http\Controllers\PaymentController::class, 'store'])->name('payment.store');
 
-Route::resource('paiements', App\Http\Controllers\PaiementController::class)->except('store');
+Route::resource('payments', App\Http\Controllers\PaymentController::class)->except('store');
 
 Route::get('/subcriptions/index', [App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
 

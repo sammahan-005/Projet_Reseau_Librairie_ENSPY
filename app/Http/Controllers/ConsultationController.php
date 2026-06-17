@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\book;
+use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -13,9 +13,11 @@ class ConsultationController extends Controller
     {
         // 1. Récupération et vérification d'existence
         $book = Book::findOrFail($id);
-        $path = 'public/' . $book->pdf_path; // Chemin relatif au disque
+        // The admin upload stores files on the 'public' disk (storage/app/public)
+        $disk = Storage::disk('public');
+        $path = $book->pdf_path; // relative to the 'public' disk (e.g. 'books/xxx.pdf')
 
-        if (!Storage::exists($path)) {
+        if (! $disk->exists($path)) {
             return response()->json(['error' => 'Fichier introuvable'], 404);
         }
 
@@ -32,8 +34,8 @@ class ConsultationController extends Controller
         }
 
         // 3. Récupération des infos du fichier
-        $file = Storage::get($path);
-        $type = Storage::mimeType($path);
+    $file = $disk->get($path);
+    $type = $disk->mimeType($path);
 
         // 4. Retour de la réponse pour PDF.js
         return response($file, 200)

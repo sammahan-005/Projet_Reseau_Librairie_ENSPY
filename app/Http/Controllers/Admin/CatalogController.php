@@ -6,14 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-use App\Models\book;
+use App\Models\Book;
 use App\Models\Category;
 
 class CatalogController extends Controller
 {
     public function index(Request $request)
     {
-        $books = book::with('categories')->latest()->paginate(10);
+        $books = Book::with('categories')->latest()->paginate(10);
         $categories = Category::all();
 
         return Inertia::render('admin/Catalog/Index', [
@@ -29,6 +29,7 @@ class CatalogController extends Controller
 
     public function edit(Request $request, $id)
     {
-        return Inertia::render('admin/Catalog/Edit', ['id' => $id]);
+        $book = Book::findOrFail($id);
+        return Inertia::render('admin/Catalog/Edit', ['book' => $book]);
     }
 }

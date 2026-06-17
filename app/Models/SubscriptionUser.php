@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class subcription_User extends Model
+class SubscriptionUser extends Model
 {
     protected $fillable = [
         'user_id',

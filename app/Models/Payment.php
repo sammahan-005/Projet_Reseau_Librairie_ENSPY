@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class paiement extends Model
+class Payment extends Model
 {
     protected $table = 'payments';
 
@@ -16,8 +16,8 @@ class paiement extends Model
         'subscription_id',
     ];
 
-    public function subscriptions()
+    public function subscription()
     {
-        return $this->belongsTo(subscription::class, 'subscription_id');
+        return $this->belongsTo(Subscription::class, 'subscription_id');
     }
 }
