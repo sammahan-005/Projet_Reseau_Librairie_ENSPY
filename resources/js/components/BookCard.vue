@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import SubscriptionGateModal from '@/components/SubscriptionGateModal.vue';
+import { useReadingTimer } from '@/composables/useReadingTimer';
 
 interface Book {
     id: number;
@@ -16,10 +17,14 @@ const props = defineProps<{
 }>();
 
 const page = usePage();
+const { remainingSeconds } = useReadingTimer();
 const showSubscriptionModal = ref(false);
 const authUser = computed(() => page.props.auth?.user);
-const activeSubscription = computed(() => (page.props as any).auth?.subscription);
-const canRead = computed(() => Boolean(authUser.value && activeSubscription.value));
+const activeSubscription = computed(() => (page.props.auth as any)?.subscription);
+const hasMonthly = computed(() => activeSubscription.value?.kind === 'monthly');
+const hasHourly = computed(() => activeSubscription.value?.kind === 'hourly');
+const hasTimeLeft = computed(() => remainingSeconds.value !== null && remainingSeconds.value > 0);
+const canRead = computed(() => Boolean(authUser.value && (hasMonthly.value || hasHourly.value) && hasTimeLeft.value));
 const targetUrl = computed(() => {
     if (!authUser.value) {
         return '/login';
@@ -29,7 +34,7 @@ const targetUrl = computed(() => {
 });
 
 function handleBookClick(event: MouseEvent) {
-    if (authUser.value && !activeSubscription.value) {
+    if (authUser.value && !canRead.value) {
         event.preventDefault();
         showSubscriptionModal.value = true;
     }

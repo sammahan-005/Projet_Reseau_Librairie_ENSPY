@@ -37,10 +37,12 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $activeSubscription = $request->user()
-            ? DB::table('subscriptions')
-                ->where('user_id', $request->user()->id)
-                ->where('created_at', '>=', now()->subMonth())
-                ->latest()
+            ? DB::table('subcription__users')
+                ->where('subcription__users.user_id', $request->user()->id)
+                ->where('subcription__users.end', '>=', now())
+                ->join('subscriptions', 'subscriptions.id', '=', 'subcription__users.subscription_id')
+                ->select('subscriptions.*', 'subcription__users.remaining', 'subcription__users.id as pivot_id')
+                ->latest('subcription__users.created_at')
                 ->first()
             : null;
 
@@ -51,8 +53,11 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'subscription' => $activeSubscription ? [
                     'id' => $activeSubscription->id,
+                    'pivot_id' => $activeSubscription->pivot_id,
                     'type' => $activeSubscription->type,
+                    'kind' => $activeSubscription->kind,
                     'duration' => $activeSubscription->duration,
+                    'remaining_seconds' => $activeSubscription->remaining * 60,
                 ] : null,
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

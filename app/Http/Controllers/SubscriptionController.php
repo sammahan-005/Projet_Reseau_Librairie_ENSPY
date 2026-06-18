@@ -6,8 +6,8 @@ use App\Http\Requests\SubscriptionRequest;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-
 
 class SubscriptionController extends Controller
 {
@@ -15,12 +15,32 @@ class SubscriptionController extends Controller
     public function index(){
 
         $subscriptions = Subscription::orderBy("created_at","desc")->paginate(10);
-        return Inertia::render('subscription/index', [
+        return Inertia::render('admin/Plans/Index', [
             'subscriptions' => $subscriptions,
         ]);
     }
+    
+    public function updateRemaining(Request $request)
+    {
+        $validated = $request->validate([
+            'pivot_id' => 'required|exists:subcription__users,id',
+            'remaining_seconds' => 'required|numeric|min:0',
+        ]);
+
+        $remainingMinutes = ceil($validated['remaining_seconds'] / 60);
+
+        DB::table('subcription__users')
+            ->where('id', $validated['pivot_id'])
+            ->where('user_id', Auth::id())
+            ->update([
+                'remaining' => $remainingMinutes,
+                'updated_at' => now(),
+            ]);
+
+        return response()->json(['message' => 'Temps mis à jour.']);
+    }
     public function create(){
-        return Inertia::render('subcription/create');
+        return Inertia::render('admin/Plans/Create');
     }
 
 
@@ -30,7 +50,7 @@ class SubscriptionController extends Controller
         $subscription = subscription::create($validated);
         $subscription->users()->attach(Auth::id());
 
-        return redirect()->route('subscription/index'); 
+        return redirect()->route('subscription.index'); 
     }
 
     public function simulate(Request $request)
@@ -65,10 +85,12 @@ class SubscriptionController extends Controller
                 'duration' => $hours * 60,
                 'price' => $hours * 700,
                 'type' => 'standard',
+                'kind' => 'hourly',
             ];
         } else {
             $payload = [
                 ...$plans[$validated['plan']],
+                'kind' => 'monthly',
             ];
         }
 

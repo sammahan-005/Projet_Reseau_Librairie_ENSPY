@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import Heading from '@/components/Heading.vue';
 import { edit } from '@/routes/appearance';
 
@@ -25,8 +24,10 @@ defineOptions({
         <Heading
             variant="small"
             title="Appearance settings"
-            description="Update your account's appearance settings"
+            description="Le thème sombre est appliqué par défaut à toute la plateforme."
         />
-        <AppearanceTabs />
+        <div class="rounded-lg border border-border p-4 bg-card">
+            <p class="text-sm text-muted-foreground">Le mode sombre est activé en permanence pour une meilleure expérience de lecture.</p>
+        </div>
     </div>
 </template>

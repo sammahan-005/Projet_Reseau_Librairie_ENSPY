@@ -10,6 +10,7 @@ class Subscription extends Model
         'duration',
         'price',
         'type',//'standard', 'medium', 'Premium'
+        'kind',
         'user_id',
     ];
 

@@ -66,37 +66,37 @@ class BookController extends Controller
 
     public function read(book $book, Request $request): Response|\Illuminate\Http\RedirectResponse
     {
-        $subscription = DB::table('subscriptions')
-            ->where('user_id', $request->user()->id)
-            ->where('created_at', '>=', now()->subMonth())
-            ->latest()
+        $subscriptionUser = DB::table('subcription__users')
+            ->where('subcription__users.user_id', $request->user()->id)
+            ->where('subcription__users.end', '>=', now())
+            ->join('subscriptions', 'subscriptions.id', '=', 'subcription__users.subscription_id')
+            ->select(
+                'subcription__users.id as pivot_id',
+                'subcription__users.remaining',
+                'subscriptions.type',
+                'subscriptions.duration'
+            )
+            ->latest('subcription__users.created_at')
             ->first();
 
-        if (! $subscription) {
+        if (! $subscriptionUser) {
             return redirect()
                 ->route('subscription.index')
-                ->with('error', 'Veuillez souscrire à un abonnement mensuel pour lire ce livre.');
+                ->with('error', 'Veuillez souscrire à un abonnement pour lire ce livre.');
         }
 
-        $dailyMinutes = (int) ($subscription->duration ?? 0);
-
-        if ($dailyMinutes <= 0) {
-            $dailyMinutes = match (strtolower($subscription->type ?? 'standard')) {
-            'premium' => 120,
-            'medium' => 60,
-            default => 30,
-            };
-        }
+        $remainingMinutes = (int) $subscriptionUser->remaining;
 
         return Inertia::render('books/Read', [
             'book' => $book->only('id', 'title', 'author', 'genre', 'cover_image'),
             'subscription' => [
-                'type' => $subscription->type,
-                'daily_minutes' => $dailyMinutes,
-                'daily_seconds' => $dailyMinutes * 60,
+                'type' => $subscriptionUser->type,
+                'daily_minutes' => (int) $subscriptionUser->duration,
+                'remaining_seconds' => $remainingMinutes * 60,
+                'pivot_id' => $subscriptionUser->pivot_id,
             ],
-            'pdfUrl' => route('consultation.consultation', $book->id),
-            'libraryUrl' => route('library'),
+            'pdfUrl' => '/consultation/' . $book->id,
+            'libraryUrl' => '/library',
         ]);
     }
 

@@ -10,9 +10,9 @@
     <div class="nav-right">
       <!-- Liens -->
       <ul class="links">
-        <li><a href="/">Accueil</a></li>
-        <li><a href="/books">Livres</a></li>
-        <li><a href="/about">À propos</a></li>
+        <li><Link href="/">Accueil</Link></li>
+        <li><Link href="/books">Livres</Link></li>
+        <li><Link href="/about">À propos</Link></li>
       </ul>
 
       <!-- Langue -->
@@ -21,19 +21,16 @@
         <option value="en">EN</option>
       </select>
 
-      <!-- Theme selector (dark / light-orange) -->
-      <button class="btn" @click="toggleTheme">{{ themeLabel }}</button>
-
-      <a :href="authUser ? '/library' : '/login'" class="btn login">
+      <Link :href="authUser ? '/library' : '/login'" class="btn login">
         {{ authUser?.name ?? 'Se connecter' }}
-      </a>
+      </Link>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
+import { usePage, Link } from '@inertiajs/vue3'
 
 const page = usePage()
 const authUser = computed(() => page.props.auth?.user as { name?: string } | null)

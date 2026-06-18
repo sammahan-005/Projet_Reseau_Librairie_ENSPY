@@ -20,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('library', [App\Http\Controllers\LibraryController::class, 'index'])->name('library');
     Route::get('books/{book}/read', [App\Http\Controllers\BookController::class, 'read'])->name('books.read');
     Route::post('subscriptions/simulate', [App\Http\Controllers\SubscriptionController::class, 'simulate'])->name('subscriptions.simulate');
+    Route::post('subscriptions/update-remaining', [App\Http\Controllers\SubscriptionController::class, 'updateRemaining'])->name('subscription.update-remaining');
 });
 
 // Reader history (sessions list)

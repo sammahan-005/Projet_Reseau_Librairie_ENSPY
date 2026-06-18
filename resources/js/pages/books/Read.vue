@@ -3,6 +3,8 @@ import { Head, router } from '@inertiajs/vue3';
 import { ArrowLeft, BookOpen, Clock3 } from 'lucide-vue-next';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 
+import { useReadingTimer } from '@/composables/useReadingTimer';
+
 const props = defineProps<{
     book: {
         id: number;
@@ -14,49 +16,30 @@ const props = defineProps<{
     subscription: {
         type: string;
         daily_minutes: number;
-        daily_seconds: number;
+        remaining_seconds: number;
+        pivot_id: number;
     };
     pdfUrl: string;
     libraryUrl: string;
 }>();
 
-const remaining = ref(props.subscription.daily_seconds);
-const finished = ref(false);
-let timer: number | undefined;
-
-const formattedTime = computed(() => {
-    const minutes = Math.floor(remaining.value / 60).toString().padStart(2, '0');
-    const seconds = (remaining.value % 60).toString().padStart(2, '0');
-
-    return `${minutes}:${seconds}`;
-});
-
-const progress = computed(() => {
-    return Math.max(0, Math.round((remaining.value / props.subscription.daily_seconds) * 100));
-});
+const { remainingSeconds, formattedTime, progress, startTimer, syncWithServer } = useReadingTimer();
+const finished = computed(() => remainingSeconds.value !== null && remainingSeconds.value <= 0);
 
 function leaveReader() {
+    // syncWithServer is handled by composable on unmount, 
+    // but explicit sync here is safe too.
     router.visit(props.libraryUrl);
 }
 
 onMounted(() => {
-    timer = window.setInterval(() => {
-        remaining.value -= 1;
-
-        if (remaining.value <= 0) {
-            remaining.value = 0;
-            finished.value = true;
-            window.clearInterval(timer);
-            window.setTimeout(leaveReader, 3500);
-        }
-    }, 1000);
+    startTimer();
+    
+    window.addEventListener('reading-time-expired', () => {
+        window.setTimeout(leaveReader, 3500);
+    });
 });
-
-onBeforeUnmount(() => {
-    if (timer) {
-        window.clearInterval(timer);
-    }
-});
+// No onBeforeUnmount needed, handled in composable.
 </script>
 
 <template>

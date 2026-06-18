@@ -7,7 +7,7 @@ import { Users, Clock, Banknote, Trophy } from 'lucide-vue-next';
 defineProps<{
   active_users: number;
   reading_hours: number;
-  revenue: number;
+  revenue: number | string;
   top_books: any[];
 }>();
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('duration');
             $table->integer('price');
             $table->enum('type', ['standard', 'medium', 'Premium'])->default('standard')->nullable();
+            $table->enum('kind', ['monthly', 'hourly'])->default('monthly');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

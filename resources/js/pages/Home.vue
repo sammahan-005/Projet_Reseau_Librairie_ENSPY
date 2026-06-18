@@ -1,9 +1,8 @@
 <script setup lang="ts">
-
-import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import BookCard from '@/components/BookCard.vue';
-import AppNavbar from '@/components/AppNavbar.vue';
+import { Head } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
+import { updateTheme } from '@/composables/useAppearance';
+import AppLayout from '@/layouts/AppLayout.vue';
 import HeroSection from '@/components/home/HeroSection.vue';
 import CategoriesSection from '@/components/home/CategoriesSection.vue';
 import PopularBooksSection from '@/components/home/PopularBooksSection.vue';
@@ -11,7 +10,6 @@ import NewCarousel from '@/components/home/NewCarousel.vue';
 import WhyChoose from '@/components/home/WhyChoose.vue';
 import StatsSection from '@/components/home/StatsSection.vue';
 import FinalCTA from '@/components/home/FinalCTA.vue';
-// import { login, register } from '@/routes';
 
 interface Book {
     id: number;
@@ -25,24 +23,18 @@ defineProps<{
     books: Book[];
 }>();
 
-const isDark = ref(document.documentElement.classList.contains('dark'));
-
-function toggleDark(): void {
-    isDark.value = !isDark.value;
-    document.documentElement.classList.toggle('dark', isDark.value);
-    localStorage.setItem('theme', isDark.value ? 'dark' : 'light');
-}
-
+onMounted(() => {
+    updateTheme('dark');
+});
 </script>
 
 <template>
-    <Head title="Booksly - Accueil" />
-
-    <div class="min-h-screen bg-[#041328] text-white">
-    <AppNavbar />
+    <AppLayout>
+        <Head title="Accueil" />
+        
         <HeroSection />
 
-        <main class="max-w-7xl mx-auto px-6">
+        <main class="mx-auto max-w-7xl px-6">
             <CategoriesSection />
 
             <PopularBooksSection :books="books" />
@@ -55,5 +47,5 @@ function toggleDark(): void {
 
             <FinalCTA />
         </main>
-    </div>
+    </AppLayout>
 </template>

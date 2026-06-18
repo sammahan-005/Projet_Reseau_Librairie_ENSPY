@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-const tabs = ['Tous les livres','En cours','À lire','Terminés','Favoris','Téléchargés'];
+const tabs = ['Tous les livres','En cours','Favoris'];
 const active = ref(tabs[0]);
 </script>
 

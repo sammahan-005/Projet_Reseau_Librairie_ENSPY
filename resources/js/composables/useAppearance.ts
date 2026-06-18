@@ -16,21 +16,13 @@ export function updateTheme(value: Appearance): void {
     }
 
     const applyResolvedTheme = (theme: ResolvedAppearance) => {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        document.documentElement.classList.toggle('light-orange', theme === 'light');
-        localStorage.setItem('theme', theme === 'dark' ? 'dark' : 'light-orange');
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light-orange');
+        localStorage.setItem('theme', 'dark');
+        localStorage.setItem('appearance', 'dark');
     };
 
-    if (value === 'system') {
-        const mediaQueryList = window.matchMedia(
-            '(prefers-color-scheme: dark)',
-        );
-        const systemTheme = mediaQueryList.matches ? 'dark' : 'light';
-
-        applyResolvedTheme(systemTheme);
-    } else {
-        applyResolvedTheme(value);
-    }
+    applyResolvedTheme('dark');
 }
 
 const setCookie = (name: string, value: string, days = 365) => {
@@ -44,48 +36,19 @@ const setCookie = (name: string, value: string, days = 365) => {
 };
 
 const mediaQuery = () => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    return window.matchMedia('(prefers-color-scheme: dark)');
-};
-
-const getStoredAppearance = () => {
-    if (typeof window === 'undefined') {
-        return null;
-    }
-
-    const appearance = localStorage.getItem('appearance') as Appearance | null;
-    const legacyTheme = localStorage.getItem('theme');
-
-    if (appearance) {
-        return appearance;
-    }
-
-    if (legacyTheme === 'dark') {
-        return 'dark';
-    }
-
-    if (legacyTheme === 'light' || legacyTheme === 'light-orange') {
-        return 'light';
-    }
-
     return null;
 };
 
-const prefersDark = (): boolean => {
-    if (typeof window === 'undefined') {
-        return false;
-    }
+const getStoredAppearance = () => {
+    return 'dark';
+};
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+const prefersDark = (): boolean => {
+    return true;
 };
 
 const handleSystemThemeChange = () => {
-    const currentAppearance = getStoredAppearance();
-
-    updateTheme(currentAppearance || 'system');
+    updateTheme('dark');
 };
 
 export function initializeTheme(): void {
@@ -93,45 +56,23 @@ export function initializeTheme(): void {
         return;
     }
 
-    // Initialize theme from saved preference or default to system...
-    const savedAppearance = getStoredAppearance();
-    updateTheme(savedAppearance || 'system');
-
-    // Set up system theme change listener...
-    mediaQuery()?.addEventListener('change', handleSystemThemeChange);
+    updateTheme('dark');
 }
 
-const appearance = ref<Appearance>('system');
+const appearance = ref<Appearance>('dark');
 
 export function useAppearance(): UseAppearanceReturn {
     onMounted(() => {
-        const savedAppearance = localStorage.getItem(
-            'appearance',
-        ) as Appearance | null;
-
-        if (savedAppearance) {
-            appearance.value = savedAppearance;
-        }
+        appearance.value = 'dark';
     });
 
-    const resolvedAppearance = computed<ResolvedAppearance>(() => {
-        if (appearance.value === 'system') {
-            return prefersDark() ? 'dark' : 'light';
-        }
-
-        return appearance.value;
-    });
+    const resolvedAppearance = computed<ResolvedAppearance>(() => 'dark');
 
     function updateAppearance(value: Appearance) {
-        appearance.value = value;
-
-        // Store in localStorage for client-side persistence...
-        localStorage.setItem('appearance', value);
-
-        // Store in cookie for SSR...
-        setCookie('appearance', value);
-
-        updateTheme(value);
+        appearance.value = 'dark';
+        localStorage.setItem('appearance', 'dark');
+        setCookie('appearance', 'dark');
+        updateTheme('dark');
     }
 
     return {

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import AppNavbar from '@/components/AppNavbar.vue';
+import { Head, Link } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
 import PersonalHero from '@/components/library/PersonalHero.vue';
 import CollectionsTabs from '@/components/library/CollectionsTabs.vue';
 import LibraryGrid from '@/components/library/LibraryGrid.vue';
@@ -7,21 +8,27 @@ import ContinueCarousel from '@/components/library/ContinueCarousel.vue';
 import Recommendations from '@/components/library/Recommendations.vue';
 import ActivityTimeline from '@/components/library/ActivityTimeline.vue';
 import UserStats from '@/components/library/UserStats.vue';
+import type { BreadcrumbItem } from '@/types';
 
 defineProps<{ 
   user: any,
-  books: any[],
+  books: { data: any[], links: any[] },
+  allBooks: any[],
   recommendations: any[],
   activity: any[],
   stats: any,
 }>();
+
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Bibliothèque', href: '/library' },
+];
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#050B1D] text-white">
-    <AppNavbar />
-
-    <main class="max-w-7xl mx-auto px-6 py-8">
+  <AppLayout :breadcrumbs="breadcrumbs">
+    <Head title="Ma Bibliothèque" />
+    
+    <main class="mx-auto max-w-7xl px-4 py-8">
       <PersonalHero :user="user" :stats="stats" />
 
       <div class="mt-8">
@@ -29,29 +36,31 @@ defineProps<{
       </div>
 
       <section class="mt-6">
-        <LibraryGrid :books="books" />
+        <LibraryGrid :books="books.data" />
+        <div class="mt-4 flex gap-2">
+            <Link v-for="link in books.links" :key="link.label" :href="link.url ?? '#'" v-html="link.label" :class="{'text-[var(--brand)]': link.active, 'text-muted-foreground': !link.url}" class="rounded px-2 py-1" />
+        </div>
       </section>
 
       <section class="mt-12">
-        <h2 class="text-2xl font-semibold mb-4">Reprendre là où vous vous êtes arrêté</h2>
-        <ContinueCarousel :items="books.filter(b => b.progress)" />
+        <h2 class="mb-4 text-2xl font-semibold">Reprendre là où vous vous êtes arrêté</h2>
+        <ContinueCarousel :items="allBooks.filter(b => b.progress)" />
       </section>
 
       <section class="mt-12">
-        <h2 class="text-2xl font-semibold mb-4">Suggestions pour vous</h2>
+        <h2 class="mb-4 text-2xl font-semibold">Suggestions pour vous</h2>
         <Recommendations :items="recommendations" />
       </section>
 
-      <section class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section class="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div class="col-span-2">
-          <h3 class="text-xl font-semibold mb-3">Activité récente</h3>
+          <h3 class="mb-3 text-xl font-semibold">Activité récente</h3>
           <ActivityTimeline :items="activity" />
         </div>
         <aside>
           <UserStats :stats="stats" />
         </aside>
       </section>
-
     </main>
-  </div>
+  </AppLayout>
 </template>

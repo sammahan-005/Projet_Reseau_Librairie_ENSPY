@@ -52,10 +52,9 @@ onMounted(() => {
           <option value="en">EN</option>
         </select>
 
-        <button @click="toggleTheme" class="px-3 py-1 rounded bg-white/10 text-white text-sm">Theme</button>
-
         <Link href="/login" class="px-3 py-1 rounded bg-violet-600 text-white text-sm">Se connecter</Link>
       </div>
     </div>
   </nav>
 </template>
+

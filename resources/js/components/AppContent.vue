@@ -12,17 +12,15 @@ const props = withDefaults(defineProps<Props>(), {
     variant: 'sidebar',
 });
 const className = computed(() => props.class);
+
+const componentToRender = computed(() => props.variant === 'sidebar' ? SidebarInset : 'main');
+const componentClass = computed(() => props.variant === 'sidebar' 
+    ? className.value 
+    : `mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl ${className.value || ''}`);
 </script>
 
 <template>
-    <SidebarInset v-if="props.variant === 'sidebar'" :class="className">
+    <component :is="componentToRender" :class="componentClass">
         <slot />
-    </SidebarInset>
-    <main
-        v-else
-        class="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl"
-        :class="className"
-    >
-        <slot />
-    </main>
+    </component>
 </template>

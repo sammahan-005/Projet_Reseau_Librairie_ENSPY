@@ -13,9 +13,9 @@
       <div class="column">
         <h4>Liens</h4>
         <ul>
-          <li><a href="/">Accueil</a></li>
-          <li><a href="/about">À propos</a></li>
-          <li><a href="/services">Services</a></li>
+          <li><Link href="/">Accueil</Link></li>
+          <li><Link href="/about">À propos</Link></li>
+          <li><Link href="/services">Services</Link></li>
         </ul>
       </div>
 
@@ -23,7 +23,7 @@
       <div class="column">
         <h4>Support</h4>
         <ul>
-          <li><a href="/contact">Contact</a></li>
+          <li><Link href="/contact">Contact</Link></li>
           <li><a href="#">FAQ</a></li>
           <li><a href="#">Aide</a></li>
         </ul>
@@ -50,6 +50,7 @@
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
 </script>
 
 <style scoped>

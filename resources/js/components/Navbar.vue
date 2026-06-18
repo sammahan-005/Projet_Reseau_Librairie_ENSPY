@@ -10,9 +10,9 @@
     <div class="nav-right">
       <!-- Liens -->
       <ul class="links">
-        <li><a href="/">Accueil</a></li>
-        <li><a href="/books">Livres</a></li>
-        <li><a href="/about">À propos</a></li>
+        <li><Link href="/">Accueil</Link></li>
+        <li><Link href="/books">Livres</Link></li>
+        <li><Link href="/about">À propos</Link></li>
       </ul>
 
       <!-- Langue -->
@@ -21,16 +21,14 @@
         <option value="en">EN</option>
       </select>
 
-      <!-- Theme selector (dark / light-orange) -->
-      <button class="btn" @click="toggleTheme">{{ themeLabel }}</button>
-
-      <a href="/login" class="btn login">Se connecter</a>
+      <Link href="/login" class="btn login">Se connecter</Link>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
+import { Link } from '@inertiajs/vue3'
 
 const currentLang = ref(localStorage.getItem('locale') || 'fr')
 const theme = ref(localStorage.getItem('theme') || (document.documentElement.classList.contains('dark') ? 'dark' : 'light'))

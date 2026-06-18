@@ -1,4 +1,6 @@
 import { createInertiaApp } from '@inertiajs/vue3';
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
+import { createApp, h, type DefineComponent } from 'vue';
 import { initializeTheme } from '@/composables/useAppearance';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -8,6 +10,12 @@ const appName = import.meta.env.VITE_APP_NAME || 'Librairie ENSPY';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
+    resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mount(el);
+    },
     layout: (name) => {
         switch (true) {
             case name === 'Welcome':
